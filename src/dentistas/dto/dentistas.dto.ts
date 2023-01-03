@@ -5,6 +5,5 @@ export class CreateDentistaDTO {
   readonly direccion: string;
   readonly email: string;
   readonly password: string;
-  readonly fechaNacimiento: string;
   readonly sexo: string;
 }
