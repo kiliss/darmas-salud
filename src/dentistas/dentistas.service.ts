@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import {Model} from 'mongoose';
 import {InjectModel} from '@nestjs/mongoose';
 import {Dentista} from './interfaces/dentistas.interface';
@@ -13,9 +13,12 @@ export class DentistasService {
     return dentistas;
   }
   async getDentista(dentistaID: string): Promise<Dentista> {
-    const dentista = await this.dentistaModel.findById(dentistaID);
+    let dentista;
+    if (dentistaID.match(/^[0-9a-fA-F]{24}$/)) {
+      dentista = await this.dentistaModel.findById(dentistaID);
+    }
     if(!dentista){
-      throw new Error('Dentista no encontrado');
+      throw new NotFoundException("Dentista no encontrado");
     }
     return dentista;
   }
@@ -24,16 +27,22 @@ export class DentistasService {
     return await dentista.save();
   }
   async deleteDentista(dentistaID: string): Promise<Dentista> {
-    const dentistaDeleted = await this.dentistaModel.findByIdAndDelete(dentistaID);
+    let dentistaDeleted;
+    if (dentistaID.match(/^[0-9a-fA-F]{24}$/)) {
+      dentistaDeleted = await this.dentistaModel.findByIdAndDelete(dentistaID);
+    }
     if(!dentistaDeleted){
-      throw new Error('Dentista no encontrado');
+      throw new NotFoundException("Dentista no encontrado");
     }
     return dentistaDeleted;
   }
   async updateDentista(dentistaID: string, createDentistaDTO: CreateDentistaDTO): Promise<Dentista> {
-    const dentistaUpdated = await this.dentistaModel.findByIdAndUpdate(dentistaID, createDentistaDTO, {new: true});
+    let dentistaUpdated;
+    if (dentistaID.match(/^[0-9a-fA-F]{24}$/)) {
+      dentistaUpdated = await this.dentistaModel.findByIdAndUpdate(dentistaID, createDentistaDTO, {new: true});
+    }
     if(!dentistaUpdated){
-      throw new Error('Dentista no encontrado');
+      throw new NotFoundException("Dentista no encontrado");
     }
     return dentistaUpdated;
   }
