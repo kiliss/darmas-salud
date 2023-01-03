@@ -12,21 +12,30 @@ export class DentistasService {
     const dentistas = await this.dentistaModel.find();
     return dentistas;
   }
-  // async getDentista(dentistaID: string): Promise<Dentista> {
-  //   const dentista = await this.dentistaModel.findById(dentistaID);
-  //   return dentista;
-  // }
+  async getDentista(dentistaID: string): Promise<Dentista> {
+    const dentista = await this.dentistaModel.findById(dentistaID);
+    if(!dentista){
+      throw new Error('Dentista no encontrado');
+    }
+    return dentista;
+  }
   async createDentista(createDentistaDTO: CreateDentistaDTO): Promise<Dentista> {
     const dentista = new this.dentistaModel(createDentistaDTO);
     return await dentista.save();
   }
-  // async deleteDentista(dentistaID: string): Promise<Dentista> {
-  //   const dentistaDeleted = await this.dentistaModel.findById(dentistaID);
-  //   return dentistaDeleted;
-  // }
-  // async updateDentista(dentistaID: string, createDentistaDTO: CreateDentistaDTO): Promise<Dentista> {
-  //   const dentistaUpdated = await this.dentistaModel.findByIdAndUpdate(dentistaID, createDentistaDTO, {new: true});
-  //   return dentistaUpdated;
-  // }
+  async deleteDentista(dentistaID: string): Promise<Dentista> {
+    const dentistaDeleted = await this.dentistaModel.findByIdAndDelete(dentistaID);
+    if(!dentistaDeleted){
+      throw new Error('Dentista no encontrado');
+    }
+    return dentistaDeleted;
+  }
+  async updateDentista(dentistaID: string, createDentistaDTO: CreateDentistaDTO): Promise<Dentista> {
+    const dentistaUpdated = await this.dentistaModel.findByIdAndUpdate(dentistaID, createDentistaDTO, {new: true});
+    if(!dentistaUpdated){
+      throw new Error('Dentista no encontrado');
+    }
+    return dentistaUpdated;
+  }
 }
 
