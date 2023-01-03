@@ -14,4 +14,9 @@ export class DentistasController {
       dentista: dentista
     });
   }
+  @Get()
+  async getDentistas(@Res() res: any) {
+    const dentistas = await this.dentistasService.getDentistas();
+    return res.status(HttpStatus.OK).json(dentistas);
+  }
 }
