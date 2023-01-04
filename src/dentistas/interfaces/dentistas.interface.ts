@@ -6,5 +6,5 @@ export interface Dentista extends Document {
   direccion: string;
   email: string;
   password: string;
-  sexo: string;
+  agenda_online: boolean;
 }

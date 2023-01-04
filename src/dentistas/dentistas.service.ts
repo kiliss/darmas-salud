@@ -1,32 +1,63 @@
-import { Injectable } from '@nestjs/common';
+import {  Injectable, NotFoundException } from '@nestjs/common';
 import {Model} from 'mongoose';
 import {InjectModel} from '@nestjs/mongoose';
 import {Dentista} from './interfaces/dentistas.interface';
-import {CreateDentistaDTO} from './dto/dentistas.dto';
+import {DentistaDto} from './dto/dentistas.dto';
+
 
 @Injectable()
 export class DentistasService {
   constructor(@InjectModel('Dentista') private readonly dentistaModel: Model<Dentista>) {}
 
-  async getDentistas(): Promise<Dentista[]> {
-    const dentistas = await this.dentistaModel.find();
+async getDentistas(): Promise<Dentista[]> {
+    const dentistas = await this.dentistaModel.find({isActive: true});
     return dentistas;
   }
-  // async getDentista(dentistaID: string): Promise<Dentista> {
-  //   const dentista = await this.dentistaModel.findById(dentistaID);
-  //   return dentista;
-  // }
-  async createDentista(createDentistaDTO: CreateDentistaDTO): Promise<Dentista> {
-    const dentista = new this.dentistaModel(createDentistaDTO);
-    return await dentista.save();
+
+async getDentistaId(id: string): Promise<Dentista> {
+    const dentista = await this.dentistaModel.findById(id);
+    if(!dentista){
+      throw new NotFoundException();
+    }
+    return dentista
   }
-  // async deleteDentista(dentistaID: string): Promise<Dentista> {
-  //   const dentistaDeleted = await this.dentistaModel.findById(dentistaID);
-  //   return dentistaDeleted;
-  // }
-  // async updateDentista(dentistaID: string, createDentistaDTO: CreateDentistaDTO): Promise<Dentista> {
-  //   const dentistaUpdated = await this.dentistaModel.findByIdAndUpdate(dentistaID, createDentistaDTO, {new: true});
-  //   return dentistaUpdated;
-  // }
+
+async createDentista(data: DentistaDto): Promise<Dentista | Error> {
+  try{
+    const dentista = new this.dentistaModel(data);
+    await dentista.save()
+    return dentista
+  } catch(error){
+    throw new Error(error)
+  }
+}
+
+async updateDentista(dentistaID: string, data: DentistaDto): Promise<Dentista | Error> {
+ try {
+  const dentista = await this.dentistaModel.findByIdAndUpdate(dentistaID, data)
+  if(!dentista){
+    throw new NotFoundException()
+  }
+  await dentista.save()
+  return dentista
+ } catch (error) {
+  throw new Error(error)
+ }
+}
+
+  async deleteDentista(dentistaID: string): Promise<Dentista> {
+    try {
+      const dentista = await this.dentistaModel.findById(dentistaID);
+      if(!dentista){
+        throw new NotFoundException()
+      }
+      dentista.agenda_online = false;
+      await dentista.save()
+      return dentista;
+      
+    } catch (error) {
+      return error
+    }
+  }
 }
 
