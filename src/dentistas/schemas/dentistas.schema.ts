@@ -1,7 +1,7 @@
 import { Schema, trusted } from "mongoose";
 
+export const DentistasSchema = new Schema({
 
-export const DentistaSchema = new Schema({
 id_sucursal: {
   type: Number,
   required: true,
@@ -21,10 +21,6 @@ apellidos: {
 telefono: {
   type: String,
   required: true
-},
-celular:{
-  type: String,
-  default: null
 },
 direccion: {
   type: String,

@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Res, HttpStatus, Body, Param } from '@nestjs/common';
-import { DentistaDto} from './dto/dentistas.dto';
+import {CreateDentistaDTO} from './dto/dentistas.dto';
 import {DentistasService} from './dentistas.service';
 import { Dentista } from './interfaces/dentistas.interface';
 
@@ -8,28 +8,13 @@ import { Dentista } from './interfaces/dentistas.interface';
 export class DentistasController {
   constructor(private dentistasService: DentistasService) {}
 
-  @Get('/')
-  getDentistas(): Promise<Dentista[]> {
-    const dentistas = this.dentistasService.getDentistas();
-    return dentistas
-  }
-
-  @Get('/:id')
-  findOne(@Param('id') id: string): Promise<Dentista> {
-    const dentista = this.dentistasService.getDentistaId(id);
-    return dentista
-  }
-
-  @Post('/')
-  create(@Body() data: DentistaDto): Promise<Dentista | Error> {
-     const dentista = this.dentistasService.createDentista(data);
-      return dentista
-    }
-
-  @Put('/:id')
-  update(@Body() data: DentistaDto, @Param('id') id: string): Promise<Dentista | Error> {
-    const dentista = this.dentistasService.updateDentista(id, data)
-    return dentista
+  @Post()
+  async create(@Res() res: any, @Body() createDentistaDTO: CreateDentistaDTO) {
+    const dentista = await this.dentistasService.createDentista(createDentistaDTO);
+    return res.status(HttpStatus.OK).json({
+      message: "dentista creado",
+      dentista: dentista
+    });
   }
 
   @Delete('/:id')
@@ -38,4 +23,25 @@ export class DentistasController {
     return dentista
   }
 
+  @Get('/:dentistaID')
+  async getDentista(@Res() res: any, @Param('dentistaID') dentistaID: string) {
+    const dentista = await this.dentistasService.getDentista(dentistaID);
+    return res.status(HttpStatus.OK).json(dentista);
+  }
+  @Delete('/:dentistaID')
+  async deleteDentista(@Res() res: any, @Param('dentistaID') dentistaID: string) {
+    const dentistaDeleted = await this.dentistasService.deleteDentista(dentistaID);
+    return res.status(HttpStatus.OK).json({
+      message: "dentista eliminado",
+      dentista: dentistaDeleted
+    });
+  }
+  @Put('/:dentistaID')
+  async updateDentista(@Res() res: any, @Param('dentistaID') dentistaID: string, @Body() createDentistaDTO: CreateDentistaDTO) {
+    const dentistaUpdated = await this.dentistasService.updateDentista(dentistaID, createDentistaDTO);
+    return res.status(HttpStatus.OK).json({
+      message: "dentista actualizado",
+      dentista: dentistaUpdated
+    });
+  }
 }
