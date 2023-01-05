@@ -3,9 +3,16 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DentistasModule } from './dentistas/dentistas.module';
+import { PagosModule } from './pagos/pagos.module';
+import { CitasModule } from './citas/citas.module';
+
+const databaseLink = process.env.DATABASE_LINK
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://localhost/nest'), DentistasModule],
+  imports: [MongooseModule.forRoot(`${databaseLink}` ,{
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+}), DentistasModule, PagosModule, CitasModule],
   controllers: [AppController],
   providers: [AppService],
 })

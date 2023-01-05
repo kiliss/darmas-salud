@@ -2,16 +2,18 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import {Model} from 'mongoose';
 import {InjectModel} from '@nestjs/mongoose';
 import {Dentista} from './interfaces/dentistas.interface';
-import {CreateDentistaDTO} from './dto/dentistas.dto';
+import {DentistaDto} from './dto/dentistas.dto';
+
 
 @Injectable()
 export class DentistasService {
   constructor(@InjectModel('Dentista') private readonly dentistaModel: Model<Dentista>) {}
 
-  async getDentistas(): Promise<Dentista[]> {
-    const dentistas = await this.dentistaModel.find();
+async getDentistas(): Promise<Dentista[]> {
+    const dentistas = await this.dentistaModel.find({isActive: true});
     return dentistas;
   }
+
   async getDentista(dentistaID: string): Promise<Dentista> {
     let dentista;
     if (dentistaID.match(/^[0-9a-fA-F]{24}$/)) {
@@ -22,10 +24,12 @@ export class DentistasService {
     }
     return dentista
   }
+
   async createDentista(createDentistaDTO: CreateDentistaDTO): Promise<Dentista> {
     const dentista = new this.dentistaModel(createDentistaDTO);
     return await dentista.save();
   }
+  
   async deleteDentista(dentistaID: string): Promise<Dentista> {
     let dentistaDeleted;
     if (dentistaID.match(/^[0-9a-fA-F]{24}$/)) {

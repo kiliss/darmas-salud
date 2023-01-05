@@ -11,6 +11,7 @@ export interface Dentista extends Document {
   agenda_online: boolean;
   ciudad: string;
   duracion_consulta: number;
+
 }
 
 
