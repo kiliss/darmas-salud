@@ -6,7 +6,7 @@ import { DentistasModule } from './dentistas/dentistas.module';
 import { PagosModule } from './pagos/pagos.module';
 import { CitasModule } from './citas/citas.module';
 
-const databaseLink = process.env.DATABASE_LINK
+const databaseLink = "mongodb://localhost:27017/nest"
 
 @Module({
   imports: [MongooseModule.forRoot(`${databaseLink}` ,{
