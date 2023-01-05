@@ -6,7 +6,7 @@ import {DentistasService} from './dentistas.service';
 @Controller('dentistas')
 export class DentistasController {
   constructor(private dentistasService: DentistasService) {}
-  @Post("/create")
+  @Post()
   async create(@Res() res: any, @Body() createDentistaDTO: CreateDentistaDTO) {
     const dentista = await this.dentistasService.createDentista(createDentistaDTO);
     return res.status(HttpStatus.OK).json({
