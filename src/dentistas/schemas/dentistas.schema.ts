@@ -6,10 +6,6 @@ id_sucursal: {
   type: Number,
   required: true,
 },
-rut: {
-   type: String,
-  required: true,
-},
 nombre:{
   type: String,
   required: true
@@ -33,7 +29,8 @@ email: {
 },
 nombre_usuario: {
   type: String,
-  required: true
+  required: true,
+  unique: true
 },
 password: {
   type: String,

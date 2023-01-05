@@ -13,9 +13,12 @@ export class DentistasService {
     return dentistas;
   }
   async getDentista(dentistaID: string): Promise<Dentista> {
-    const dentista = await this.dentistaModel.findById(dentistaID);
+    let dentista;
+    if (dentistaID.match(/^[0-9a-fA-F]{24}$/)) {
+      dentista = await this.dentistaModel.findById(dentistaID);
+    }
     if(!dentista){
-      throw new NotFoundException();
+      throw new NotFoundException("Dentista no encontrado");
     }
     return dentista
   }
