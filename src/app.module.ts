@@ -6,8 +6,10 @@ import { DentistasModule } from './dentistas/dentistas.module';
 import { PagosModule } from './pagos/pagos.module';
 import { CitasModule } from './citas/citas.module';
 
+const databaseLink = process.env.DATABASE_LINK
+
 @Module({
-  imports: [MongooseModule.forRoot('mongodb+srv://user_node_cafe:8Y4NdH9j2TZwh1FG@miclustercafe.ztei79a.mongodb.net/cafeDB',{
+  imports: [MongooseModule.forRoot(`${databaseLink}` ,{
     useUnifiedTopology: true,
     useNewUrlParser: true,
 }), DentistasModule, PagosModule, CitasModule],
