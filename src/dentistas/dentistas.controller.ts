@@ -1,11 +1,13 @@
 import { Controller, Get, Post, Put, Delete, Res, HttpStatus, Body, Param } from '@nestjs/common';
 import {CreateDentistaDTO} from './dto/dentistas.dto';
 import {DentistasService} from './dentistas.service';
+import { Dentista } from './interfaces/dentistas.interface';
 
 
 @Controller('dentistas')
 export class DentistasController {
   constructor(private dentistasService: DentistasService) {}
+
   @Post()
   async create(@Res() res: any, @Body() createDentistaDTO: CreateDentistaDTO) {
     const dentista = await this.dentistasService.createDentista(createDentistaDTO);
@@ -14,11 +16,13 @@ export class DentistasController {
       dentista: dentista
     });
   }
-  @Get()
-  async getDentistas(@Res() res: any) {
-    const dentistas = await this.dentistasService.getDentistas();
-    return res.status(HttpStatus.OK).json(dentistas);
+
+  @Delete('/:id')
+    delete(@Param('id') id:string): Promise<Dentista> {
+    const dentista = this.dentistasService.deleteDentista(id)
+    return dentista
   }
+
   @Get('/:dentistaID')
   async getDentista(@Res() res: any, @Param('dentistaID') dentistaID: string) {
     const dentista = await this.dentistasService.getDentista(dentistaID);

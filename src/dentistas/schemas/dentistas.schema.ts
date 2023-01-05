@@ -1,7 +1,7 @@
-import { Schema } from "mongoose";
-
+import { Schema, trusted } from "mongoose";
 
 export const DentistasSchema = new Schema({
+
 id_sucursal: {
   type: Number,
   required: true,

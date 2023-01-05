@@ -13,3 +13,4 @@ export class CreateDentistaDTO {
   readonly ciudad: string;
   readonly duracion_consulta: number;
 }
+
