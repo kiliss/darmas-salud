@@ -1,13 +1,14 @@
-import { Document } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { SchemaTypes, Types, Document } from 'mongoose';
 export interface Cita extends Document {
-  readonly fecha: Date;
-  readonly horario_inicial: number;
-  readonly horario_final: number;
-  readonly paciente: string;
-  readonly dentista: string;
-  readonly estado_citas: string;
-  readonly situacion: string;
-  readonly descripcion: string;
-  readonly id_estado_cita: number;
-  readonly isActive: boolean;
+  nombre_paciente: string;
+  hora_inicio: string;
+  hora_fin: string;
+  duracion: number;
+  nombre_dentista: string;
+  fecha: string;
+  id_estado: number;
+  nombre_estado: string;
+  id_situacion: number;
+  descripcion_situacion: string;
 }

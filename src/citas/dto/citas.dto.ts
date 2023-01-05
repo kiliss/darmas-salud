@@ -1,12 +1,12 @@
 export class CreateCitasDTO {
-  fecha: Date;
-  horario_inicial: number;
-  horario_final: number;
-  paciente: string;
-  dentista: string;
-  estado_citas: string;
-  situacion: string;
-  descripcion: string;
-  id_estado_cita: number;
-  isActive: boolean;
+  readonly nombre_paciente: string;
+  readonly hora_inicio: string;
+  readonly hora_fin: string;
+  readonly duracion: number;
+  readonly nombre_dentista: string;
+  readonly fecha: string;
+  readonly id_estado: number;
+  readonly nombre_estado: string;
+  readonly id_situacion: number;
+  readonly descripcion_situacion: string;
 }

@@ -1,44 +1,14 @@
 import { Schema } from 'mongoose';
 
 export const CitasSchema = new Schema({
-  fecha: {
-    type: Date,
-    required: true,
-  },
-  horario_inicial: {
-    type: Number,
-    required: true,
-  },
-  horario_final: {
-    type: Number,
-    required: true,
-  },
-  paciente: {
-    type: String,
-    required: true,
-  },
-  dentista: {
-    type: String,
-    required: true,
-  },
-  estado_citas: {
-    type: String,
-    required: true,
-  },
-  situacion: {
-    type: String,
-    required: true,
-  },
-  descripcion: {
-    type: String,
-    required: true,
-  },
-  id_estado_cita: {
-    type: Number,
-    required: true,
-  },
-  isActive: {
-    type: Boolean,
-    default: true,
-  },
+  nombre_paciente: { type: String, required: true },
+  hora_inicio: { type: String, required: true },
+  hora_fin: { type: String, required: true },
+  duracion: { type: Number, required: true },
+  nombre_dentista: { type: String, required: true },
+  fecha: { type: String, required: true },
+  id_estado: { type: Number, required: true },
+  nombre_estado: { type: String, required: true },
+  id_situacion: { type: Number, required: true },
+  descripcion_situacion: { type: String, required: true },
 });
