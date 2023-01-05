@@ -1,26 +1,59 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCitaDto } from './dto/create-cita.dto';
-import { UpdateCitaDto } from './dto/update-cita.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { Cita } from './interfaces/cita.interface';
+import { CreateCitasDTO } from './dto/citas.dto';
 
 @Injectable()
 export class CitasService {
-  create(createCitaDto: CreateCitaDto) {
-    return 'This action adds a new cita';
+  constructor(@InjectModel('Cita') private readonly citaModel: Model<Cita>) {}
+
+  async getCitas(): Promise<Cita[]> {
+    const Citas = await this.citaModel.find({ isActive: true });
+    return Citas;
   }
 
-  findAll() {
-    return `This action returns all citas`;
+  async getCita(CitaID: string): Promise<Cita> {
+    let Cita;
+    if (CitaID.match(/^[0-9a-fA-F]{24}$/)) {
+      Cita = await this.citaModel.findById(CitaID);
+    }
+    if (!Cita) {
+      throw new NotFoundException('Cita no encontrada');
+    }
+    return Cita;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} cita`;
+  async createCita(createCitaDTO: CreateCitasDTO): Promise<Cita> {
+    const Cita = new this.citaModel(createCitaDTO);
+    return await Cita.save();
   }
 
-  update(id: number, updateCitaDto: UpdateCitaDto) {
-    return `This action updates a #${id} cita`;
+  async deleteCita(CitaID: string): Promise<Cita> {
+    let CitaDeleted;
+    if (CitaID.match(/^[0-9a-fA-F]{24}$/)) {
+      CitaDeleted = await this.citaModel.findByIdAndDelete(CitaID);
+    }
+    if (!CitaDeleted) {
+      throw new NotFoundException('Cita no encontrada');
+    }
+    return CitaDeleted;
   }
-
-  remove(id: number) {
-    return `This action removes a #${id} cita`;
+  async updateCita(
+    CitaID: string,
+    createCitaDTO: CreateCitasDTO,
+  ): Promise<Cita> {
+    let CitaUpdated;
+    if (CitaID.match(/^[0-9a-fA-F]{24}$/)) {
+      CitaUpdated = await this.citaModel.findByIdAndUpdate(
+        CitaID,
+        createCitaDTO,
+        { new: true },
+      );
+    }
+    if (!CitaUpdated) {
+      throw new NotFoundException('Cita no encontrada');
+    }
+    return CitaUpdated;
   }
 }
