@@ -9,19 +9,27 @@ export class CitasService {
   constructor(@InjectModel('Cita') private readonly citaModel: Model<Cita>) {}
 
   async getCitas(): Promise<Cita[]> {
-    const Citas = await this.citaModel.find({ isActive: true });
+    const Citas = await this.citaModel.find();
     return Citas;
   }
 
-  async getCita(CitaID: string): Promise<Cita> {
+  async getCitasID(citaID: string): Promise<any> {
     let Cita;
-    if (CitaID.match(/^[0-9a-fA-F]{24}$/)) {
-      Cita = await this.citaModel.findById(CitaID);
+    if (citaID.match(/^[0-9a-fA-F]{24}$/)) {
+       Cita = await this.citaModel.find({
+        id_dentista: citaID,
+       }).populate("id_dentista").exec();
     }
     if (!Cita) {
       throw new NotFoundException('Cita no encontrada');
     }
     return Cita;
+  }
+  async getCitasDentista(dentistaID: string): Promise<Cita[]> {
+    const Citas = await this.citaModel.find({
+      id_dentista: dentistaID,
+    });
+    return Citas;
   }
 
   async createCita(createCitaDTO: CreateCitasDTO): Promise<Cita> {

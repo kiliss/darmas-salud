@@ -3,6 +3,7 @@ import { CitasController } from './citas.controller';
 import { CitasService } from './citas.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CitasSchema } from './schemas/citas.schema';
+
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Cita', schema: CitasSchema }]),

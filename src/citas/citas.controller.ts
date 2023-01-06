@@ -16,6 +16,20 @@ import { CreateCitasDTO } from './dto/citas.dto';
 export class CitasController {
   constructor(private readonly citasService: CitasService) {}
 
+  @Get('/:dentistaID')
+  async getCitasDentista(
+    @Res() res: any,
+    @Param('dentistaID') dentistaID: string,
+  ) {
+    const citas = await this.citasService.getCitasDentista(dentistaID);
+    return res.status(HttpStatus.OK).json(citas);
+  }
+  @Get('/c/:citaID')
+  async getCitaID(@Res() res: any, @Param('citaID') citaID: string) {
+    const cita = await this.citasService.getCitasID(citaID);
+    return res.status(HttpStatus.OK).json(cita);
+  }
+  
   @Post()
   async create(@Res() res: any, @Body() createCitasDTO: CreateCitasDTO) {
     const cita = await this.citasService.createCita(createCitasDTO);
@@ -25,15 +39,11 @@ export class CitasController {
     });
   }
   @Get()
-  async getCitas(@Res() res: any) {
+  async getCita(@Res() res: any) {
     const citas = await this.citasService.getCitas();
     return res.status(HttpStatus.OK).json(citas);
   }
-  @Get('/:citaID')
-  async getCita(@Res() res: any, @Param('citaID') citaID: string) {
-    const cita = await this.citasService.getCita(citaID);
-    return res.status(HttpStatus.OK).json(cita);
-  }
+
   @Delete('/:citaID')
   async deleteCita(@Res() res: any, @Param('citaID') citaID: string) {
     const citaDeleted = await this.citasService.deleteCita(citaID);
