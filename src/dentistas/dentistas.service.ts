@@ -59,5 +59,21 @@ async updateDentista(dentistaID: string, data: DentistaDto): Promise<Dentista | 
       return error
     }
   }
+
+  async auth(nombre_usuario: string): Promise<Dentista | undefined> {
+    try {
+      const dentista = await this.dentistaModel.findOne({nombre_usuario});
+      console.log(dentista)
+  
+      if(!dentista){
+        throw new NotFoundException()
+      }
+      return dentista
+
+    } catch (error) {
+      return error
+    }
+  }
+
 }
 
