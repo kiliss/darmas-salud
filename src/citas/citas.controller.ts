@@ -1,34 +1,70 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Res,
+  HttpStatus,
+} from '@nestjs/common';
 import { CitasService } from './citas.service';
-import { CreateCitaDto } from './dto/create-cita.dto';
-import { UpdateCitaDto } from './dto/update-cita.dto';
+import { CreateCitasDTO } from './dto/citas.dto';
 
 @Controller('citas')
 export class CitasController {
   constructor(private readonly citasService: CitasService) {}
 
+  @Get('/:dentistaID')
+  async getCitasDentista(
+    @Res() res: any,
+    @Param('dentistaID') dentistaID: string,
+  ) {
+    const citas = await this.citasService.getCitasDentista(dentistaID);
+    return res.status(HttpStatus.OK).json(citas);
+  }
+  @Get('/c/:citaID')
+  async getCitaID(@Res() res: any, @Param('citaID') citaID: string) {
+    const cita = await this.citasService.getCitasID(citaID);
+    return res.status(HttpStatus.OK).json(cita);
+  }
+  
   @Post()
-  create(@Body() createCitaDto: CreateCitaDto) {
-    return this.citasService.create(createCitaDto);
+  async create(@Res() res: any, @Body() createCitasDTO: CreateCitasDTO) {
+    const cita = await this.citasService.createCita(createCitasDTO);
+    return res.status(HttpStatus.OK).json({
+      message: 'cita creada',
+      cita: cita,
+    });
   }
-
   @Get()
-  findAll() {
-    return this.citasService.findAll();
+  async getCita(@Res() res: any) {
+    const citas = await this.citasService.getCitas();
+    return res.status(HttpStatus.OK).json(citas);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.citasService.findOne(+id);
+  @Delete('/:citaID')
+  async deleteCita(@Res() res: any, @Param('citaID') citaID: string) {
+    const citaDeleted = await this.citasService.deleteCita(citaID);
+    return res.status(HttpStatus.OK).json({
+      message: 'cita eliminada',
+      cita: citaDeleted,
+    });
   }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCitaDto: UpdateCitaDto) {
-    return this.citasService.update(+id, updateCitaDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.citasService.remove(+id);
+  @Patch('/:citaID')
+  async updateCita(
+    @Res() res: any,
+    @Param('citaID') citaID: string,
+    @Body() CreateCitasDTO: CreateCitasDTO,
+  ) {
+    const citaUpdated = await this.citasService.updateCita(
+      citaID,
+      CreateCitasDTO,
+    );
+    return res.status(HttpStatus.OK).json({
+      message: 'cita actualizada',
+      cita: citaUpdated,
+    });
   }
 }

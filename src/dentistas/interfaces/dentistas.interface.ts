@@ -1,10 +1,14 @@
 import { Document } from 'mongoose';
 export interface Dentista extends Document {
-  nombre: string;
-  apellido: string;
-  telefono: string;
-  direccion: string;
+  id_sucursal: Number;
+  nombre: String;
+  apellidos: String;
+  telefono: String;
   email: string;
+  direccion: string;
+  nombre_usuario: string;
   password: string;
   agenda_online: boolean;
+  ciudad: string;
+  duracion_consulta: number;
 }
