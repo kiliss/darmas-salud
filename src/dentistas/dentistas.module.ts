@@ -9,5 +9,6 @@ import { DentistasSchema } from './schemas/dentistas.schema';
   ],
   controllers: [DentistasController],
   providers: [DentistasService],
+  exports: [DentistasService],
 })
 export class DentistasModule {}
